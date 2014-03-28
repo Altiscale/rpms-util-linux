@@ -2,7 +2,7 @@
 Summary: A collection of basic system utilities
 Name: util-linux
 Version: 2.23.2
-Release: 6%{?dist}
+Release: 16%{?dist}
 License: GPLv2 and GPLv2+ and LGPLv2+ and BSD with advertising and Public Domain
 Group: System Environment/Base
 URL: http://en.wikipedia.org/wiki/Util-linux
@@ -97,13 +97,40 @@ Patch8: 2.24-libmount-mem.patch
 Patch9: 2.24-sfdisk-y-n-miscmatch.patch
 # v2.24 backport: #1007885 - utmpdump is not IPv6 ready
 Patch10: 2.24-utmpdump-ipv6.patch
+# v2.24 backport: #1024366 - losetup does not use loop-control to add device
+Patch11: 2.24-losetup-add-device.patch
+# v2.24 backport: 1016471 - Document that blockdev --setbsz call has never worked
+Patch12: 2.24-blockdev-setbsz-hint.patch
+# v2.25 backport: #1039189 - taskset man page PERMISSIONS section is incorrect
+Patch13: 2.25-taskset-man-fix-permissions.patch
+# v2.25 backport: #1050852 - lscpu: support discontinuous NUMA nodes
+Patch14: 2.25-lib-add-path_strdup.patch
+Patch15: 2.25-lscpu-discontinuous-NUMA-nodes.patch
+Patch16: 2.25-lscpu-sort-NUMA.patch
+# v2.25 backport: #1046849 - filesystem type is not correctly displayed by df command
+Patch17: 2.25-libblkid-Identify-extN-file-system-properly.patch
+# v2.25 backport: #1055490 - libblkid: Do not problem for backup btrfs superblock
+Patch18: 2.25-libblkid-no-more-probe-for-btrfs-backup-superblock.patch
+# v2.25 backport: #1054186 - wipefs does not clean gpt header fully, PMBR remains
+Patch19: 2.25-libblkid-detect-alone-PMBR.patch
+Patch20: 2.25-wipefs-call-BLKRRPART-when-erase-partition-table.patch
+# v2.25 backport: #977162 - fix the description of XFS "allocsize="
+Patch21: 2.25-mount-man-xfs.patch
+# rhel7.0: #1073851 - disable user namespaces
+Patch22: rhel7.0-unshare-user.patch
+# v2.25 backpoprt: #1078618 - flock nfs file fails on nfsv4
+Patch23: 2.25-flock-nfs4.patch
+# v2.25 backport: #1047376 - blkid hangs while reading from /dev/fd0
+Patch24: 2.25-libblkid-io-errors.patch
+#v2.24 and v2.25 backport: #1079931 - fsck: warning on kdump boot
+Patch25: 2.24-fsck-fstab.patch
+Patch26: 2.25-fsck-nohelper.patch
 
 %description
 The util-linux package contains a large variety of low-level system
 utilities that are necessary for a Linux system to function. Among
 others, Util-linux contains the fdisk configuration tool and the login
 program.
-
 
 %package -n libmount
 Summary: Device mounting library
@@ -209,12 +236,9 @@ SMP systems.
 
 
 %prep
-%setup -q -n %{name}-%{upstream_version}
-cp %{SOURCE8} %{SOURCE9} .
+%autosetup -p1 -n %{name}-%{upstream_version}
 
-for p in %{patches}; do
-  %{__patch} -p1 -F%{_default_patch_fuzz} -i "$p"
-done
+cp %{SOURCE8} %{SOURCE9} .
 
 %build
 unset LINGUAS || :
@@ -813,6 +837,42 @@ fi
 %{_libdir}/pkgconfig/uuid.pc
 
 %changelog
+* Fri Mar 28 2014 Karel Zak <kzak@redhat.com> 2.23.2-16
+- fix bugs in patch for #1047376
+
+* Tue Mar 25 2014 Karel Zak <kzak@redhat.com> 2.23.2-15
+- fix #1078618 - flock nfs file fails on nfsv4
+- fix #1047376 - blkid hangs while reading from /dev/fd0
+- fix #1079931 - fsck: warning on kdump boot
+
+* Wed Mar 12 2014 Karel Zak <kzak@redhat.com> 2.23.2-14
+- fix #1073851 - disable user namespaces at all
+
+* Thu Feb 20 2014 Karel Zak <kzak@redhat.com> 2.23.2-13
+- fix #1061751 - nsenter set uid for user namespaces
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.23.2-12
+- Mass rebuild 2014-01-24
+
+* Thu Jan 23 2014 Karel Zak <kzak@redhat.com> 2.23.2-11
+- fix #1046849 - filesystem type is not correctly displayed by df command
+- fix #1055490 - libblkid: Do not problem for backup btrfs superblock
+- fix #1054186 - wipefs does not clean gpt header fully, PMBR remains
+
+* Tue Jan 14 2014 Karel Zak <kzak@redhat.com> 2.23.2-10
+- sort NOMA nodes in lscpu(1) output to improve fix for #1050852
+
+* Tue Jan 14 2014 Karel Zak <kzak@redhat.com> 2.23.2-9
+- fix #1039189 - taskset man page PERMISSIONS section is incorrect
+- fix #1050852 - lscpu: support discontinuous NUMA nodes
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.23.2-8
+- Mass rebuild 2013-12-27
+
+* Fri Nov 15 2013 Karel Zak <kzak@redhat.com> 2.23.2-7
+- fix #1024366 - losetup does not use loop-control to add device
+- fix #1016471 - document that blockdev --setbsz call has never worked
+
 * Mon Oct  7 2013 Karel Zak <kzak@redhat.com> 2.23.2-6
 - fix #1010193 - libmount umount issues
 - fix #1009349 - Joking sfdisk rewriting PT after "n"
