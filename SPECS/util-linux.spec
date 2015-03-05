@@ -2,7 +2,7 @@
 Summary: A collection of basic system utilities
 Name: util-linux
 Version: 2.23.2
-Release: 16%{?dist}
+Release: 21%{?dist}
 License: GPLv2 and GPLv2+ and LGPLv2+ and BSD with advertising and Public Domain
 Group: System Environment/Base
 URL: http://en.wikipedia.org/wiki/Util-linux
@@ -25,6 +25,9 @@ BuildRequires: libutempter-devel
 Buildrequires: systemd-devel
 Buildrequires: libuser-devel
 BuildRequires: libcap-ng-devel
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 
 ### Sources
 Source0: ftp://ftp.kernel.org/pub/linux/utils/util-linux/v2.23/util-linux-%{upstream_version}.tar.xz
@@ -125,6 +128,43 @@ Patch24: 2.25-libblkid-io-errors.patch
 #v2.24 and v2.25 backport: #1079931 - fsck: warning on kdump boot
 Patch25: 2.24-fsck-fstab.patch
 Patch26: 2.25-fsck-nohelper.patch
+
+#
+# RHEL 7.1
+#
+# 1067354 - dmesg -w output not line-buffered
+Patch27: 2.25-dmesg-w.patch
+# 1072298 - util-linux/lscpu: '--sysroot' broken on XFS
+Patch28: 2.25-lscpu-d_type.patch
+# 1072930 - hwclock --systohc can hang on busy or virtual machine
+Patch29: 2.25-hwclock-hang.patch
+# 1077310 - wipefs problem with some live .isos
+Patch30: 2.25-wipefs-nested-pt.patch
+# 1077864 - Backport swapon: allow a more flexible swap discard policy
+Patch31: 2.25-swapon-discard.patch
+# 1080407 - libblkid XFS detection is too fragile
+Patch32: 2.25-libblkid-xfs.patch
+# RHEL6.6 port #1115442 - kill(1) doesn't check errno after calling strtol() 
+Patch33: 2.17-kill-strtol.patch
+# 1127823 - losetup does not accept offset
+Patch34: 2.24-losetup-offset.patch
+# 1127891 - wipefs 4k disks and gpt partitions
+Patch35: 2.25-libblkid-gpt-512.patch
+# 1136111 - "findmnt" returns incomplete output on kernel-3.14
+Patch36: 2.24-libmount-3.14.patch
+# backport from upstream: #1140591 - improve mount --move documentation
+Patch37: 2.26-mount-man-move.patch
+# RHEL6.6 port: #1131522 - backport --fork and --mount-proc to unshare(1) 
+Patch38: 2.24-unshare-mount-fork.patch
+# Backport from upstream (v2.25-214-g8a4c64e): #1113043 - backport lslogins(1)
+Patch39: 2.26-libsmartcols.patch
+Patch40: 2.26-lslogins.patch
+# 1149278 - partx fails to update a specific partition other than the first
+Patch41: 2.24-partx-update.patch
+# 1156352 - blkdiscard progress report and interruptibility of the process
+Patch42: 2.26-blkdiscard.patch
+# 1181444 - raw command fails with "Cannot locate raw device".
+Patch43: 2.26-raw-stat.patch
 
 %description
 The util-linux package contains a large variety of low-level system
@@ -242,6 +282,9 @@ cp %{SOURCE8} %{SOURCE9} .
 
 %build
 unset LINGUAS || :
+
+# unfortunately, we did changes to build-system
+./autogen.sh
 
 export CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 $RPM_OPT_FLAGS"
 export SUID_CFLAGS="-fpie"
@@ -513,6 +556,7 @@ fi
 %{_bindir}/lsblk
 %{_bindir}/lscpu
 %{_bindir}/lslocks
+%{_bindir}/lslogins
 %{_bindir}/mcookie
 %{_bindir}/more
 %{_bindir}/mountpoint
@@ -560,6 +604,7 @@ fi
 %{_mandir}/man1/login.1*
 %{_mandir}/man1/look.1*
 %{_mandir}/man1/lscpu.1*
+%{_mandir}/man1/lslogins.1*
 %{_mandir}/man1/mcookie.1*
 %{_mandir}/man1/more.1*
 %{_mandir}/man1/mountpoint.1*
@@ -837,6 +882,33 @@ fi
 %{_libdir}/pkgconfig/uuid.pc
 
 %changelog
+* Tue Jan 13 2015 Karel Zak <kzak@redhat.com> 2.23.2-21
+- fix #1181444 - raw command fails with "Cannot locate raw device"
+
+* Fri Dec 12 2014 Karel Zak <kzak@redhat.com> 2.23.2-20
+- fix lslogins patch (#1113043)
+
+* Mon Oct 27 2014 Karel Zak <kzak@redhat.com> 2.23.2-19
+- fix #1156352 - blkdiscard progress report and interruptibility of the process
+
+* Fri Oct 10 2014 Karel Zak <kzak@redhat.com> 2.23.2-18
+- fix #1149278 - partx fails to update a specific partition other than the first
+
+* Thu Sep 25 2014 Karel Zak <kzak@redhat.com> 2.23.2-17
+- fix #1067354 - dmesg -w output not line-buffered
+- fix #1072298 - util-linux/lscpu: '--sysroot' broken on XFS
+- fix #1072930 - hwclock --systohc can hang on busy or virtual machine
+- fix #1077310 - wipefs problem with some live .isos
+- fix #1077864 - swapon: allow a more flexible swap discard policy
+- fix #1080407 - libblkid XFS detection is too fragile
+- fix #1115442 - kill(1) doesn't check errno after calling strtol()
+- fix #1127823 - losetup does not accept offset
+- fix #1127891 - wipefs 4k disks and gpt partitions
+- fix #1136111 - "findmnt" returns incomplete output on kernel-3.14
+- fix #1140591 - improve mount --move documentation
+- fix #1131522 - backport --fork and --mount-proc to unshare(1)
+- fix #1113043 - backport lslogins(1)
+
 * Fri Mar 28 2014 Karel Zak <kzak@redhat.com> 2.23.2-16
 - fix bugs in patch for #1047376
 
