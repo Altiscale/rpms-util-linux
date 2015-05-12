@@ -2,7 +2,7 @@
 Summary: A collection of basic system utilities
 Name: util-linux
 Version: 2.23.2
-Release: 21%{?dist}
+Release: 22%{?dist}
 License: GPLv2 and GPLv2+ and LGPLv2+ and BSD with advertising and Public Domain
 Group: System Environment/Base
 URL: http://en.wikipedia.org/wiki/Util-linux
@@ -165,6 +165,12 @@ Patch41: 2.24-partx-update.patch
 Patch42: 2.26-blkdiscard.patch
 # 1181444 - raw command fails with "Cannot locate raw device".
 Patch43: 2.26-raw-stat.patch
+
+#
+# RHEL 7.2
+#
+Patch44: 2.25-uuidd-timeout.patch
+
 
 %description
 The util-linux package contains a large variety of low-level system
@@ -882,6 +888,9 @@ fi
 %{_libdir}/pkgconfig/uuid.pc
 
 %changelog
+* Mon Apr 20 2015 Karel Zak <kzak@redhat.com> 2.23.2-22
+- fix #1092039 - uuidd not configured to run permanently
+
 * Tue Jan 13 2015 Karel Zak <kzak@redhat.com> 2.23.2-21
 - fix #1181444 - raw command fails with "Cannot locate raw device"
 
