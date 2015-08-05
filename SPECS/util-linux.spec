@@ -2,7 +2,7 @@
 Summary: A collection of basic system utilities
 Name: util-linux
 Version: 2.23.2
-Release: 22%{?dist}
+Release: 22%{?dist}.1
 License: GPLv2 and GPLv2+ and LGPLv2+ and BSD with advertising and Public Domain
 Group: System Environment/Base
 URL: http://en.wikipedia.org/wiki/Util-linux
@@ -167,9 +167,11 @@ Patch42: 2.26-blkdiscard.patch
 Patch43: 2.26-raw-stat.patch
 
 #
-# RHEL 7.2
+# RHEL 7.1.Z
 #
 Patch44: 2.25-uuidd-timeout.patch
+# 1238678 - os-prober attempts to mount thin pool devices
+Patch45: 2.25-libblkid-thinpool.patch
 
 
 %description
@@ -888,6 +890,9 @@ fi
 %{_libdir}/pkgconfig/uuid.pc
 
 %changelog
+* Fri Jul  3 2015 Karel Zak <kzak@redhat.com> 2.23.2-22.el7_1.1
+- fix #1238678 - os-prober attempts to mount thin pool devices
+
 * Mon Apr 20 2015 Karel Zak <kzak@redhat.com> 2.23.2-22
 - fix #1092039 - uuidd not configured to run permanently
 
