@@ -2,7 +2,7 @@
 Summary: A collection of basic system utilities
 Name: util-linux
 Version: 2.23.2
-Release: 22%{?dist}.1
+Release: 26%{?dist}
 License: GPLv2 and GPLv2+ and LGPLv2+ and BSD with advertising and Public Domain
 Group: System Environment/Base
 URL: http://en.wikipedia.org/wiki/Util-linux
@@ -167,12 +167,36 @@ Patch42: 2.26-blkdiscard.patch
 Patch43: 2.26-raw-stat.patch
 
 #
-# RHEL 7.1.Z
+# RHEL 7.2
 #
 Patch44: 2.25-uuidd-timeout.patch
-# 1238678 - os-prober attempts to mount thin pool devices
-Patch45: 2.25-libblkid-thinpool.patch
-
+# 1225235 - blockdev --report fails on loop and pmem devices
+Patch45: 2.25-blockdev-geom.patch
+# 1225053 - [RFE] backport fstrim -a and unit file
+Patch46: 2.25-fstrim-all.patch
+# 1131523 - mount does not appear to be correctly documented for default mount options
+Patch47: 2.25-mount-man-default.patch
+# 1147526 - Incorrect message printed when su is killed
+Patch48: 2.26-su-coredump-message.patch
+# 1165702 - make login(1) insensitive to SIGXFSZ and huge lastlog
+Patch49: 2.26-login-SIGXFSZ.patch
+# 1184558 - logger silently changes facility from kern to user
+Patch50: 2.26-logger-man-kern.patch
+# 1198243 - blkid does not recognize xfs external log device
+Patch51: 2.25-libblkid-xfs-log.patch
+# 1208081 - lsblk does not list dm-multipath and partitioned devices
+Patch52: 2.26-lsblk-mpath.patch
+# 1209594 - RHEL7: unshare: add --propagation, use MS_PRIVATE by default
+# 1229436 - Remove patch that disables User Namespaces
+Patch53: 2.26-unshare-rebase.patch
+# 1116100 - Add -Z SELInux option to nsenter
+Patch54: v2.26-nsenter-selinux.patch
+# 1199619 - os-prober attempts to mount thin pool devices
+Patch55: 2.25-libblkid-thinpool.patch
+# 1251250 - blkid outputs nothing for some partitions (e.g. sun label)
+Patch56: 2.25-libblkid-return-codes.patch
+# 1182831 - blkid incorrectly detects boot sec + MBR as FAT
+Patch57: 2.26-libblkid-fat.patch
 
 %description
 The util-linux package contains a large variety of low-level system
@@ -540,6 +564,8 @@ fi
 %ghost %attr(0644,root,root) %verify(not md5 size mtime) /var/log/lastlog
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) /etc/mtab
 
+%{_unitdir}/fstrim.*
+
 %{_bindir}/cal
 %{_bindir}/chrt
 %{_bindir}/col
@@ -832,7 +858,7 @@ fi
 %doc Documentation/licenses/COPYING.GPLv2
 %{_mandir}/man8/uuidd.8*
 %{_sbindir}/uuidd
-%{_unitdir}/*
+%{_unitdir}/uuidd.*
 %dir %attr(2775, uuidd, uuidd) /var/lib/libuuid
 %dir %attr(2775, uuidd, uuidd) /run/uuidd
 %{compldir}/uuidd
@@ -890,8 +916,27 @@ fi
 %{_libdir}/pkgconfig/uuid.pc
 
 %changelog
-* Fri Jul  3 2015 Karel Zak <kzak@redhat.com> 2.23.2-22.el7_1.1
-- fix #1238678 - os-prober attempts to mount thin pool devices
+* Fri Aug 21 2015 Karel Zak <kzak@redhat.com> 2.23.2-26
+- fix #1182831 - blkid incorrectly detects boot sec + MBR as FAT
+
+* Wed Aug 12 2015 Karel Zak <kzak@redhat.com> 2.23.2-25
+- fix #1251250 - blkid outputs nothing for some partitions (e.g. sun label)
+
+* Thu Jul  2 2015 Karel Zak <kzak@redhat.com> 2.23.2-24
+- fix #1199619 - os-prober attempts to mount thin pool devices
+
+* Tue Jun 23 2015 Karel Zak <kzak@redhat.com> 2.23.2-23
+- fix #1225235 - blockdev --report fails on loop and pmem devices
+- fix #1225053 - [RFE] backport fstrim -a and unit file
+- fix #1131523 - mount does not appear to be correctly documented for default mount options
+- fix #1147526 - Incorrect message printed when su is killed
+- fix #1165702 - make login(1) insensitive to SIGXFSZ and huge lastlog
+- fix #1184558 - logger silently changes facility from kern to user
+- fix #1198243 - blkid does not recognize xfs external log device
+- fix #1208081 - lsblk does not list dm-multipath and partitioned devices
+- fix #1209594 - RHEL7: unshare: add --propagation, use MS_PRIVATE by default
+- fix #1229436 - Remove patch that disables User Namespaces
+- fix #1116100 - Add -Z SELInux option to nsenter
 
 * Mon Apr 20 2015 Karel Zak <kzak@redhat.com> 2.23.2-22
 - fix #1092039 - uuidd not configured to run permanently

@@ -1,6 +1,6 @@
 diff -up util-linux-2.23.2/fdisks/fdisk.c.kzak util-linux-2.23.2/fdisks/fdisk.c
---- util-linux-2.23.2/fdisks/fdisk.c.kzak	2013-07-30 10:39:26.195738131 +0200
-+++ util-linux-2.23.2/fdisks/fdisk.c	2015-07-03 10:30:50.378965526 +0200
+--- util-linux-2.23.2/fdisks/fdisk.c.kzak	2015-07-02 12:37:24.465906322 +0200
++++ util-linux-2.23.2/fdisks/fdisk.c	2015-07-02 12:37:57.870673753 +0200
 @@ -34,6 +34,7 @@
  #include "canonicalize.h"
  #include "strutils.h"
@@ -10,11 +10,11 @@ diff -up util-linux-2.23.2/fdisks/fdisk.c.kzak util-linux-2.23.2/fdisks/fdisk.c
  #include "fdisksunlabel.h"
  #include "fdisksgilabel.h"
 diff -up util-linux-2.23.2/include/sysfs.h.kzak util-linux-2.23.2/include/sysfs.h
---- util-linux-2.23.2/include/sysfs.h.kzak	2013-06-13 09:46:10.400650451 +0200
-+++ util-linux-2.23.2/include/sysfs.h	2015-07-03 10:30:50.378965526 +0200
-@@ -73,6 +73,8 @@ extern int sysfs_is_partition_dirent(DIR
- extern int sysfs_devno_to_wholedisk(dev_t dev, char *diskname,
+--- util-linux-2.23.2/include/sysfs.h.kzak	2015-07-02 12:12:50.408196320 +0200
++++ util-linux-2.23.2/include/sysfs.h	2015-07-02 12:13:09.708061372 +0200
+@@ -74,6 +74,8 @@ extern int sysfs_devno_to_wholedisk(dev_
              size_t len, dev_t *diskdevno);
+ extern int sysfs_devno_is_wholedisk(dev_t devno);
  
 +extern int sysfs_devno_is_lvm_private(dev_t devno);
 +
@@ -22,8 +22,8 @@ diff -up util-linux-2.23.2/include/sysfs.h.kzak util-linux-2.23.2/include/sysfs.
  			       int *c, int *t, int *l);
  extern char *sysfs_scsi_host_strdup_attribute(struct sysfs_cxt *cxt,
 diff -up util-linux-2.23.2/libblkid/src/blkidP.h.kzak util-linux-2.23.2/libblkid/src/blkidP.h
---- util-linux-2.23.2/libblkid/src/blkidP.h.kzak	2015-07-03 10:29:08.582688645 +0200
-+++ util-linux-2.23.2/libblkid/src/blkidP.h	2015-07-03 10:30:50.378965526 +0200
+--- util-linux-2.23.2/libblkid/src/blkidP.h.kzak	2015-07-02 12:18:27.349840375 +0200
++++ util-linux-2.23.2/libblkid/src/blkidP.h	2015-07-02 12:19:07.797557558 +0200
 @@ -221,6 +221,7 @@ struct blkid_struct_probe
  #define BLKID_FL_PRIVATE_FD	(1 << 1)	/* see blkid_new_probe_from_filename() */
  #define BLKID_FL_TINY_DEV	(1 << 2)	/* <= 1.47MiB (floppy or so) */
@@ -33,8 +33,8 @@ diff -up util-linux-2.23.2/libblkid/src/blkidP.h.kzak util-linux-2.23.2/libblkid
  /* private per-probing flags */
  #define BLKID_PROBE_FL_IGNORE_PT (1 << 1)	/* ignore partition table */
 diff -up util-linux-2.23.2/libblkid/src/partitions/partitions.c.kzak util-linux-2.23.2/libblkid/src/partitions/partitions.c
---- util-linux-2.23.2/libblkid/src/partitions/partitions.c.kzak	2015-07-03 10:29:08.582688645 +0200
-+++ util-linux-2.23.2/libblkid/src/partitions/partitions.c	2015-07-03 10:30:50.378965526 +0200
+--- util-linux-2.23.2/libblkid/src/partitions/partitions.c.kzak	2015-07-02 12:19:11.669530485 +0200
++++ util-linux-2.23.2/libblkid/src/partitions/partitions.c	2015-07-02 12:28:24.166667964 +0200
 @@ -537,6 +537,8 @@ static int idinfo_probe(blkid_probe pr,
  
  	if (pr->size <= 0 || (id->minsz && id->minsz > pr->size))
@@ -96,8 +96,8 @@ diff -up util-linux-2.23.2/libblkid/src/partitions/partitions.c.kzak util-linux-
  	if (!prc)
  		goto done;
 diff -up util-linux-2.23.2/libblkid/src/probe.c.kzak util-linux-2.23.2/libblkid/src/probe.c
---- util-linux-2.23.2/libblkid/src/probe.c.kzak	2015-07-03 10:29:08.583688638 +0200
-+++ util-linux-2.23.2/libblkid/src/probe.c	2015-07-03 10:30:50.378965526 +0200
+--- util-linux-2.23.2/libblkid/src/probe.c.kzak	2015-07-02 12:13:48.823787869 +0200
++++ util-linux-2.23.2/libblkid/src/probe.c	2015-07-02 12:38:20.110518915 +0200
 @@ -110,6 +110,7 @@
  
  #include "blkidP.h"
@@ -150,9 +150,9 @@ diff -up util-linux-2.23.2/libblkid/src/probe.c.kzak util-linux-2.23.2/libblkid/
  	blkid_probe_start(pr);
  
 diff -up util-linux-2.23.2/libblkid/src/superblocks/superblocks.c.kzak util-linux-2.23.2/libblkid/src/superblocks/superblocks.c
---- util-linux-2.23.2/libblkid/src/superblocks/superblocks.c.kzak	2015-07-03 10:29:08.586688617 +0200
-+++ util-linux-2.23.2/libblkid/src/superblocks/superblocks.c	2015-07-03 10:30:50.378965526 +0200
-@@ -335,6 +335,9 @@ static int superblocks_probe(blkid_probe
+--- util-linux-2.23.2/libblkid/src/superblocks/superblocks.c.kzak	2015-07-02 12:29:32.370193121 +0200
++++ util-linux-2.23.2/libblkid/src/superblocks/superblocks.c	2015-07-02 12:31:06.897535008 +0200
+@@ -338,6 +338,9 @@ static int superblocks_probe(blkid_probe
  
  	if (!pr || chn->idx < -1)
  		return -EINVAL;
@@ -162,7 +162,7 @@ diff -up util-linux-2.23.2/libblkid/src/superblocks/superblocks.c.kzak util-linu
  	blkid_probe_chain_reset_vals(pr, chn);
  
  	DBG(LOWPROBE, blkid_debug("--> starting probing loop [SUBLKS idx=%d]",
-@@ -450,6 +453,9 @@ static int superblocks_safeprobe(blkid_p
+@@ -453,6 +456,9 @@ static int superblocks_safeprobe(blkid_p
  	int intol = 0;
  	int rc;
  
@@ -173,8 +173,8 @@ diff -up util-linux-2.23.2/libblkid/src/superblocks/superblocks.c.kzak util-linu
  
  		if (blkid_probe_is_tiny(pr) && !count)
 diff -up util-linux-2.23.2/libblkid/src/verify.c.kzak util-linux-2.23.2/libblkid/src/verify.c
---- util-linux-2.23.2/libblkid/src/verify.c.kzak	2013-06-13 09:46:10.429650699 +0200
-+++ util-linux-2.23.2/libblkid/src/verify.c	2015-07-03 10:30:50.378965526 +0200
+--- util-linux-2.23.2/libblkid/src/verify.c.kzak	2015-07-02 12:15:51.782928121 +0200
++++ util-linux-2.23.2/libblkid/src/verify.c	2015-07-02 12:16:45.078555470 +0200
 @@ -112,6 +112,10 @@ blkid_dev blkid_verify(blkid_cache cache
  		   (unsigned long)diff));
  #endif
@@ -187,13 +187,12 @@ diff -up util-linux-2.23.2/libblkid/src/verify.c.kzak util-linux-2.23.2/libblkid
  		cache->probe = blkid_new_probe();
  		if (!cache->probe) {
 diff -up util-linux-2.23.2/lib/sysfs.c.kzak util-linux-2.23.2/lib/sysfs.c
---- util-linux-2.23.2/lib/sysfs.c.kzak	2013-06-13 09:46:10.410650536 +0200
-+++ util-linux-2.23.2/lib/sysfs.c	2015-07-03 10:32:32.953236879 +0200
-@@ -638,6 +638,35 @@ err:
-     return -1;
+--- util-linux-2.23.2/lib/sysfs.c.kzak	2015-07-02 12:12:29.193344657 +0200
++++ util-linux-2.23.2/lib/sysfs.c	2015-07-02 12:12:13.565453930 +0200
+@@ -639,6 +639,35 @@ err:
  }
  
-+/*
+ /*
 + * Returns 1 if the device is private LVM device.
 + */
 +int sysfs_devno_is_lvm_private(dev_t devno)
@@ -222,6 +221,17 @@ diff -up util-linux-2.23.2/lib/sysfs.c.kzak util-linux-2.23.2/lib/sysfs.c
 +	return rc;
 +}
 +
++/*
+  * Return 0 or 1, or < 0 in case of error
+  */
+ int sysfs_devno_is_wholedisk(dev_t devno)
+@@ -651,6 +680,9 @@ int sysfs_devno_is_wholedisk(dev_t devno
+ 	return devno == disk;
+ }
  
++
++
++
  int sysfs_scsi_get_hctl(struct sysfs_cxt *cxt, int *h, int *c, int *t, int *l)
  {
+ 	char buf[PATH_MAX], *hctl;
