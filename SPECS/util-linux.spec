@@ -1,6 +1,6 @@
 ### Macros
 # Default version 2.27
-%{!?upstream_version: %define upstream_version 2.27}
+%{!?upstream_version: %define upstream_version 2.27.1}
 # Default buildnumber to 1
 %{!?build_number: %define build_number 1}
 %define _prefix /opt/altiscale
