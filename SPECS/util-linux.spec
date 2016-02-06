@@ -26,7 +26,6 @@ BuildRequires: pam-devel
 BuildRequires: zlib-devel
 BuildRequires: popt-devel
 BuildRequires: libutempter-devel
-Buildrequires: systemd-devel
 Buildrequires: libuser-devel
 BuildRequires: libcap-ng-devel
 BuildRequires: autoconf
