@@ -23,6 +23,7 @@ BuildRequires: gettext-devel
 BuildRequires: libselinux-devel
 BuildRequires: ncurses-devel
 BuildRequires: pam-devel
+BuildRequires: libudev-devel
 BuildRequires: zlib-devel
 BuildRequires: popt-devel
 BuildRequires: libutempter-devel
