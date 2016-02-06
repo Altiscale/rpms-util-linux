@@ -528,7 +528,7 @@ exit 0
 %{_bindir}/mountpoint
 %{_bindir}/mesg
 %{_bindir}/namei
-#%{_bindir}/nsenter
+%{_bindir}/nsenter
 %{_bindir}/prlimit
 %{_bindir}/raw
 %{_bindir}/rename
@@ -537,7 +537,7 @@ exit 0
 %{_bindir}/script
 %{_bindir}/scriptreplay
 %{_bindir}/setarch
-#%{_bindir}/setpriv
+%{_bindir}/setpriv
 %{_bindir}/setsid
 %{_bindir}/setterm
 %{_bindir}/tailf
@@ -581,7 +581,7 @@ exit 0
 %{_mandir}/man1/more.1*
 %{_mandir}/man1/mountpoint.1*
 %{_mandir}/man1/namei.1*
-#%{_mandir}/man1/nsenter.1*
+%{_mandir}/man1/nsenter.1*
 %{_mandir}/man1/prlimit.1*
 %{_mandir}/man1/rename.1*
 %{_mandir}/man1/renice.1*
@@ -589,7 +589,7 @@ exit 0
 %{_mandir}/man1/runuser.1*
 %{_mandir}/man1/script.1*
 %{_mandir}/man1/scriptreplay.1*
-#%{_mandir}/man1/setpriv.1*
+%{_mandir}/man1/setpriv.1*
 %{_mandir}/man1/setsid.1*
 %{_mandir}/man1/setterm.1*
 %{_mandir}/man1/su.1*
@@ -735,6 +735,7 @@ exit 0
 %{compldir}/more
 %{compldir}/mountpoint
 %{compldir}/namei
+%{compldir}/nsenter
 %{compldir}/partx
 %{compldir}/pivot_root
 %{compldir}/prlimit
@@ -749,6 +750,7 @@ exit 0
 %{compldir}/script
 %{compldir}/scriptreplay
 %{compldir}/setarch
+%{compldir}/setpriv
 %{compldir}/setsid
 %{compldir}/setterm
 %{compldir}/su
